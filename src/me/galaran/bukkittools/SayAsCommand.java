@@ -4,6 +4,7 @@ import com.sk89q.minecraft.util.commands.gtools.Command;
 import com.sk89q.minecraft.util.commands.gtools.CommandContext;
 import com.sk89q.minecraft.util.commands.gtools.CommandPermissions;
 import me.galaran.bukkitutils.gtools.GUtils;
+import me.galaran.bukkitutils.gtools.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -30,10 +31,10 @@ public class SayAsCommand {
         String message = commandStr.substring(delimIndex + 1, commandStr.length()).trim();
 
         String text = ChatColor.GRAY + "[" + name + ChatColor.GRAY + "] " + message;
-        text = text.replaceAll("&", "§");
+        text = StringUtils.colorizeAmps(text);
         for (Player curPlayer : Bukkit.getOnlinePlayers()) {
             curPlayer.sendMessage(text);
         }
-        GUtils.log(ChatColor.stripColor(text));
+        GUtils.log(text);
     }
 }

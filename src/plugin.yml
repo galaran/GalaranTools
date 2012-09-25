@@ -1,6 +1,6 @@
 name: GalaranTools
 main: me.galaran.bukkittools.GalaranTools
-version: 2.0
+version: 2.1
 author: Galaran
 
 load: POSTWORLD
@@ -10,13 +10,11 @@ commands:
         description: Galarans tools main command
         permission: gtools.main
         permission-message: You do not have permission
-        usage: chunk <block_x> <block_z> | loc | hasperm [player] <perm> | event <classname>
         aliases: [gt]
     sayas:
         description: Say as command
         permission: gtools.sayas
         permission-message: You do not have permission
-        usage: 'sayas &2Name | &4Message'
 
 permissions:
     gtools.main:

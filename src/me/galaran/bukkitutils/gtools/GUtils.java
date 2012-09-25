@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
@@ -116,16 +117,12 @@ public class GUtils {
         return loc.getWorld().isChunkLoaded(loc.getBlockX() >> 4, loc.getBlockZ() >> 4);
     }
 
+    public static String locToString(Location loc) {
+        return String.format(Locale.US, "%s, pitch: %.2f, yaw: %.2f", locToStringWorldXYZ(loc), loc.getPitch(), loc.getYaw());
+    }
+
     public static String locToStringXYZ(Location loc) {
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        sb.append(loc.getBlockX());
-        sb.append(' ');
-        sb.append(loc.getBlockY());
-        sb.append(' ');
-        sb.append(loc.getBlockZ());
-        sb.append(']');
-        return sb.toString();
+        return String.format(Locale.US, "[%.2f %.2f %.2f]", loc.getX(), loc.getY(), loc.getZ());
     }
 
     public static String locToStringWorldXYZ(Location loc) {
@@ -171,27 +168,41 @@ public class GUtils {
         return sb.toString();
     }
 
-    public static void log(String message, Level level) {
-        log.log(level, message);
+    public static boolean isPositionsEquals(Location loc1, Location loc2, double eps) {
+        return Math.abs(loc1.getX() - loc2.getX()) <= eps &&
+                Math.abs(loc1.getZ() - loc2.getZ()) <= eps &&
+                Math.abs(loc1.getY() - loc2.getY()) <= eps;
     }
 
-    public static void log(String message) {
-        log(message, Level.INFO);
+    public static void log(String message, Level level, Object... params) {
+        String finalString = StringUtils.parameterizeString(message, params);
+        log.log(level, ChatColor.stripColor(finalString));
     }
 
-    public static void sendMessage(CommandSender p, String message) {
-        p.sendMessage(chatPrefix + message);
+    public static void log(String message, Object... params) {
+        log(message, Level.INFO, params);
     }
 
-    public static void sendMessage(CommandSender p, String message, ChatColor color) {
-        sendMessage(p, color + message);
+    public static void sendMessage(CommandSender p, String message, Object... params) {
+        String finalString = StringUtils.colorizeAmps(StringUtils.parameterizeString(message, params));
+        if (!finalString.equals("$suppress")) {
+            p.sendMessage(chatPrefix + finalString);
+        }
     }
 
-    public static void sendMessageSafe(String playerName, String message) {
+    public static void sendMessageSafe(String playerName, String message, Object... params) {
         Player player = Bukkit.getPlayerExact(playerName);
         if (player != null) {
-            player.sendMessage(message);
+            sendMessage(player, message, params);
         }
+    }
+
+    public static void sendTranslated(CommandSender p, String key, Object... params) {
+        sendMessage(p, Lang.getTranslation(key), params);
+    }
+
+    public static void sendTranslatedSafe(String playerName, String key, Object... params) {
+        sendMessageSafe(playerName, Lang.getTranslation(key), params);
     }
 
     public static String enabledDisabled(boolean state) {

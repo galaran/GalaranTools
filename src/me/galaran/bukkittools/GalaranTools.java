@@ -7,8 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class GalaranTools extends JavaPlugin {
 
     private CommandsManager<CommandSender> commands;
@@ -38,21 +36,21 @@ public class GalaranTools extends JavaPlugin {
         try {
             commands.execute(command.getName(), args, sender, sender);
         } catch (CommandPermissionsException e) {
-            GUtils.sendMessage(sender, "You don't have permission.", ChatColor.RED);
+            GUtils.sendMessage(sender, ChatColor.RED + "You don't have permission.");
         } catch (MissingNestedCommandException e) {
-            GUtils.sendMessage(sender, e.getUsage(), ChatColor.RED);
+            GUtils.sendMessage(sender, ChatColor.RED + e.getUsage());
         } catch (CommandUsageException e) {
-            GUtils.sendMessage(sender, e.getMessage(), ChatColor.RED);
-            GUtils.sendMessage(sender, e.getUsage(), ChatColor.RED);
+            GUtils.sendMessage(sender, ChatColor.RED + e.getMessage());
+            GUtils.sendMessage(sender, ChatColor.RED + e.getUsage());
         } catch (WrappedCommandException e) {
             if (e.getCause() instanceof NumberFormatException) {
-                GUtils.sendMessage(sender, "Number expected, string received instead.", ChatColor.RED);
+                GUtils.sendMessage(sender, ChatColor.RED + "Number expected, string received instead.");
             } else {
-                GUtils.sendMessage(sender, "An error has occurred. See console.", ChatColor.RED);
+                GUtils.sendMessage(sender, ChatColor.RED + "An error has occurred. See console.");
                 e.printStackTrace();
             }
         } catch (CommandException e) {
-            GUtils.sendMessage(sender, e.getMessage(), ChatColor.RED);
+            GUtils.sendMessage(sender, ChatColor.RED + e.getMessage());
         }
 
         return true;
