@@ -183,8 +183,13 @@ public class GUtils {
         log(message, Level.INFO, params);
     }
 
+    /** Parameterized + colorized */
+    public static String getProcessed(String string, Object... params) {
+        return StringUtils.colorizeAmps(StringUtils.parameterizeString(string, params));
+    }
+
     public static void sendMessage(CommandSender p, String message, Object... params) {
-        String finalString = StringUtils.colorizeAmps(StringUtils.parameterizeString(message, params));
+        String finalString = getProcessed(message, params);
         if (!finalString.equals("$suppress")) {
             p.sendMessage(chatPrefix + finalString);
         }
@@ -197,6 +202,10 @@ public class GUtils {
         }
     }
 
+    public static String getProcessedTranslation(String key, Object... params) {
+        return getProcessed(Lang.getTranslation(key), params);
+    }
+
     public static void sendTranslated(CommandSender p, String key, Object... params) {
         sendMessage(p, Lang.getTranslation(key), params);
     }
@@ -205,7 +214,19 @@ public class GUtils {
         sendMessageSafe(playerName, Lang.getTranslation(key), params);
     }
 
+    public static void serverBroadcast(String message) {
+        if (!message.equals("$suppress")) {
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "say " + message);
+        }
+    }
+
     public static String enabledDisabled(boolean state) {
         return state ? ENABLELD : DISABLED;
+    }
+
+    public static boolean stringContainsIgnoreCaseAndColor(String line, String matchingString) {
+        String lineRaw = ChatColor.stripColor(StringUtils.colorizeAmps(line)).trim().toLowerCase();
+        String matchingStringRaw = ChatColor.stripColor(matchingString).trim().toLowerCase();
+        return lineRaw.contains(matchingStringRaw);
     }
 }

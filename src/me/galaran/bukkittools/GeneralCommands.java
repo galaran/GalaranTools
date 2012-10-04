@@ -7,11 +7,13 @@ import me.galaran.bukkitutils.gtools.DoOrNotify;
 import me.galaran.bukkitutils.gtools.GUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredListener;
 
 import java.lang.reflect.Field;
@@ -76,8 +78,8 @@ public class GeneralCommands {
     @CommandPermissions("gtools.main")
     public void location(CommandContext args, CommandSender sender) {
         if (!DoOrNotify.isPlayer(sender)) return;
-
         Player player = (Player) sender;
+
         GUtils.sendMessage(player, "Your location: " + ChatColor.YELLOW + GUtils.locToString(player.getLocation()));
     }
 
@@ -135,5 +137,21 @@ public class GeneralCommands {
             sender.sendMessage(String.format("§a%s§f - §6%s§f §3%s", rl.getPriority().name(), rl.getPlugin().getName(),
                     rl.getListener().getClass().getName()));
         }
+    }
+
+    @Command(aliases = { "stackdata" }, desc = "Shows data of item stack in your hand", min = 0, max = 0)
+    @CommandPermissions("gtools.main")
+    public void stackdata(CommandContext args, CommandSender sender) {
+        if (!DoOrNotify.isPlayer(sender)) return;
+        Player player = (Player) sender;
+
+        ItemStack stack = player.getItemInHand();
+        String message;
+        if (stack == null || stack.getType() == Material.AIR) {
+            message = ChatColor.RED + "No stack in hand";
+        } else {
+            message = "Data: " + ChatColor.GREEN + stack.getData().getData();
+        }
+        GUtils.sendMessage(player, message);
     }
 }
