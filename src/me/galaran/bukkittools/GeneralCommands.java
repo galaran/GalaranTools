@@ -139,7 +139,7 @@ public class GeneralCommands {
         }
     }
 
-    @Command(aliases = { "stackdata" }, desc = "Shows data of item stack in your hand", min = 0, max = 0)
+    @Command(aliases = { "id" }, desc = "Shows id and data of the stack in your hand", min = 0, max = 0)
     @CommandPermissions("gtools.main")
     public void stackdata(CommandContext args, CommandSender sender) {
         if (!DoOrNotify.isPlayer(sender)) return;
@@ -150,7 +150,7 @@ public class GeneralCommands {
         if (stack == null || stack.getType() == Material.AIR) {
             message = ChatColor.RED + "No stack in hand";
         } else {
-            message = "Data: " + ChatColor.GREEN + stack.getData().getData();
+            message = ChatColor.YELLOW.toString() + stack.getTypeId() + ChatColor.GRAY + ":" + ChatColor.GREEN + stack.getDurability();
         }
         GUtils.sendMessage(player, message);
     }
