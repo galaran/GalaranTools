@@ -26,7 +26,11 @@ public class GUtils {
 
     public static void init(Logger logger, String chatPrefixx) {
         log = logger;
-        chatPrefix = ChatColor.GRAY + "[" + chatPrefixx + "] " + ChatColor.WHITE;
+        chatPrefix = StringUtils.surroundString("[", chatPrefixx, "] ", ChatColor.GRAY, ChatColor.DARK_PURPLE);
+    }
+
+    public static String enabledDisabled(boolean state) {
+        return state ? ENABLELD : DISABLED;
     }
 
     public static void setBlockMatData(Block block, MaterialData matData, boolean applyPhysics) {
@@ -77,42 +81,6 @@ public class GUtils {
         return sb.toString();
     }
 
-    public static Map<String, Object> serializeLocation(Location loc) {
-        if (loc == null) return null;
-
-        Map<String, Object> locData = new LinkedHashMap<String, Object>();
-        locData.put("x", loc.getX());
-        locData.put("y", loc.getY());
-        locData.put("z", loc.getZ());
-        locData.put("world", loc.getWorld().getName());
-        locData.put("pitch", loc.getPitch());
-        locData.put("yaw", loc.getYaw());
-        return locData;
-    }
-
-    public static Location deserializeLocation(Object locDataObject) {
-        if (locDataObject == null) return null;
-        Map<?, ?> locData = (Map<?, ?>) locDataObject;
-
-        World world = Bukkit.getServer().getWorld((String) locData.get("world"));
-        if (world == null) {
-            throw new IllegalArgumentException("Non-existent world: " + locData.get("world"));
-        }
-        Location loc = new Location(world,
-                ((Number) locData.get("x")).doubleValue(),
-                ((Number) locData.get("y")).doubleValue(),
-                ((Number) locData.get("z")).doubleValue());
-
-        if (locData.containsKey("pitch")) {
-            loc.setPitch(((Number) locData.get("pitch")).floatValue());
-        }
-        if (locData.containsKey("yaw")) {
-            loc.setYaw(((Number) locData.get("yaw")).floatValue());
-        }
-
-        return loc;
-    }
-
     public static boolean isChunkLoaded(Location loc) {
         return loc.getWorld().isChunkLoaded(loc.getBlockX() >> 4, loc.getBlockZ() >> 4);
     }
@@ -121,12 +89,12 @@ public class GUtils {
         return String.format(Locale.US, "%s, pitch: %.2f, yaw: %.2f", locToStringWorldXYZ(loc), loc.getPitch(), loc.getYaw());
     }
 
-    public static String locToStringXYZ(Location loc) {
-        return String.format(Locale.US, "[%.2f %.2f %.2f]", loc.getX(), loc.getY(), loc.getZ());
-    }
-
     public static String locToStringWorldXYZ(Location loc) {
         return loc.getWorld().getName() + ": " + locToStringXYZ(loc);
+    }
+
+    public static String locToStringXYZ(Location loc) {
+        return String.format(Locale.US, "[%.2f %.2f %.2f]", loc.getX(), loc.getY(), loc.getZ());
     }
 
     public static String stackToString(ItemStack stack) {
@@ -174,22 +142,17 @@ public class GUtils {
                 Math.abs(loc1.getY() - loc2.getY()) <= eps;
     }
 
-    public static void log(String message, Level level, Object... params) {
+    public static void log(Level level, String message, Object... params) {
         String finalString = StringUtils.parameterizeString(message, params);
         log.log(level, ChatColor.stripColor(finalString));
     }
 
     public static void log(String message, Object... params) {
-        log(message, Level.INFO, params);
-    }
-
-    /** Parameterized + colorized */
-    public static String getProcessed(String string, Object... params) {
-        return StringUtils.colorizeAmps(StringUtils.parameterizeString(string, params));
+        log(Level.INFO, message, params);
     }
 
     public static void sendMessage(CommandSender p, String message, Object... params) {
-        String finalString = getProcessed(message, params);
+        String finalString = StringUtils.decorateString(message, params);
         if (!finalString.equals("$suppress")) {
             p.sendMessage(chatPrefix + finalString);
         }
@@ -202,8 +165,8 @@ public class GUtils {
         }
     }
 
-    public static String getProcessedTranslation(String key, Object... params) {
-        return getProcessed(Lang.getTranslation(key), params);
+    public static String getDecoratedTranslation(String key, Object... params) {
+        return StringUtils.decorateString(Lang.getTranslation(key), params);
     }
 
     public static void sendTranslated(CommandSender p, String key, Object... params) {
@@ -214,19 +177,21 @@ public class GUtils {
         sendMessageSafe(playerName, Lang.getTranslation(key), params);
     }
 
-    public static void serverBroadcast(String message) {
-        if (!message.equals("$suppress")) {
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "say " + message);
+    public static void serverBroadcast(String rawMessage) {
+        if (!rawMessage.equals("$suppress")) {
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "say " + rawMessage);
         }
     }
 
-    public static String enabledDisabled(boolean state) {
-        return state ? ENABLELD : DISABLED;
-    }
+    public static void broadcast(String rawMessage, Location loc, double radius) {
+        if (rawMessage.equals("$suppress")) return;
 
-    public static boolean stringContainsIgnoreCaseAndColor(String line, String matchingString) {
-        String lineRaw = ChatColor.stripColor(StringUtils.colorizeAmps(line)).trim().toLowerCase();
-        String matchingStringRaw = ChatColor.stripColor(matchingString).trim().toLowerCase();
-        return lineRaw.contains(matchingStringRaw);
+        for (Player curPlayer : Bukkit.getOnlinePlayers()) {
+            Location curPlayerLoc = curPlayer.getLocation();
+            if (!curPlayerLoc.getWorld().equals(loc.getWorld())) continue;
+            if (curPlayerLoc.distance(loc) <= radius) {
+                sendMessage(curPlayer, rawMessage);
+            }
+        }
     }
 }
