@@ -1,7 +1,7 @@
 package me.galaran.bukkittools;
 
 import com.sk89q.minecraft.util.commands.gtools.*;
-import me.galaran.bukkitutils.gtools.GUtils;
+import me.galaran.bukkitutils.gtools.Messaging;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,7 +13,7 @@ public class GalaranTools extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        GUtils.init(this.getLogger(), "GTools");
+        Messaging.init(this.getLogger(), "GTools");
 
         commands = new CommandsManager<CommandSender>() {
             @Override
@@ -25,6 +25,7 @@ public class GalaranTools extends JavaPlugin {
 
         commands.register(GTCommands.class);
         commands.register(SayAsCommand.class);
+        commands.register(PlayerCmdCommand.class);
     }
 
     @Override
@@ -36,21 +37,21 @@ public class GalaranTools extends JavaPlugin {
         try {
             commands.execute(command.getName(), args, sender, sender);
         } catch (CommandPermissionsException e) {
-            GUtils.sendMessage(sender, ChatColor.RED + "You don't have permission.");
+            Messaging.send(sender, ChatColor.RED + "You don't have permission.");
         } catch (MissingNestedCommandException e) {
-            GUtils.sendMessage(sender, ChatColor.RED + e.getUsage());
+            Messaging.send(sender, ChatColor.RED + e.getUsage());
         } catch (CommandUsageException e) {
-            GUtils.sendMessage(sender, ChatColor.RED + e.getMessage());
-            GUtils.sendMessage(sender, ChatColor.RED + e.getUsage());
+            Messaging.send(sender, ChatColor.RED + e.getMessage());
+            Messaging.send(sender, ChatColor.RED + e.getUsage());
         } catch (WrappedCommandException e) {
             if (e.getCause() instanceof NumberFormatException) {
-                GUtils.sendMessage(sender, ChatColor.RED + "Number expected, string received instead.");
+                Messaging.send(sender, ChatColor.RED + "Number expected, string received instead.");
             } else {
-                GUtils.sendMessage(sender, ChatColor.RED + "An error has occurred. See console.");
+                Messaging.send(sender, ChatColor.RED + "An error has occurred. See console.");
                 e.printStackTrace();
             }
         } catch (CommandException e) {
-            GUtils.sendMessage(sender, ChatColor.RED + e.getMessage());
+            Messaging.send(sender, ChatColor.RED + e.getMessage());
         }
 
         return true;

@@ -4,7 +4,8 @@ import com.sk89q.minecraft.util.commands.gtools.Command;
 import com.sk89q.minecraft.util.commands.gtools.CommandContext;
 import com.sk89q.minecraft.util.commands.gtools.CommandPermissions;
 import me.galaran.bukkitutils.gtools.DoOrNotify;
-import me.galaran.bukkitutils.gtools.GUtils;
+import me.galaran.bukkitutils.gtools.LocUtils;
+import me.galaran.bukkitutils.gtools.Messaging;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,11 +21,7 @@ import java.lang.reflect.Field;
 
 public class GeneralCommands {
 
-    private final GalaranTools plugin;
-
-    public GeneralCommands(GalaranTools plugin) {
-        this.plugin = plugin;
-    }
+    public GeneralCommands(GalaranTools plugin) { }
 
     @Command(aliases = { "hasperm" }, desc = "Check is Player has Permission",
             usage = "[player] <perm>", min = 1, max = 2)
@@ -35,7 +32,7 @@ public class GeneralCommands {
                 printIsHasPerm(sender, (Player) sender, args.getString(0));
             }
         } else {
-            Player target = DoOrNotify.getPlayer(args.getString(0), false, sender);
+            Player target = DoOrNotify.getPlayerFuzzy(args.getString(0), sender);
             if (target != null) {
                 printIsHasPerm(sender, target, args.getString(1));
             }
@@ -43,7 +40,7 @@ public class GeneralCommands {
     }
 
     private void printIsHasPerm(CommandSender sender, Player player, String perm) {
-        GUtils.sendMessage(sender, "Player &6$1 $2 permission $3", player.getName(),
+        Messaging.send(sender, "Player &6$1 $2 permission $3", player.getName(),
                 (player.hasPermission(perm) ? ChatColor.GREEN + "has" : ChatColor.RED + "has not"), perm);
     }
 
@@ -59,7 +56,7 @@ public class GeneralCommands {
             if (sender instanceof Player) {
                 world = ((Player) sender).getWorld();
             } else {
-                GUtils.sendMessage(sender, "Specify world as 3th parameter, when execute this command from the console");
+                Messaging.send(sender, "Specify world as 3th parameter, when execute this command from the console");
                 return;
             }
         }
@@ -70,7 +67,7 @@ public class GeneralCommands {
         int cz = z >> 4;
 
         boolean chunkIsLoaded = world.isChunkLoaded(cx, cz);
-        GUtils.sendMessage(sender, "Chunk [$1 $2] in the world &6$3&f is $4", cx, cz, world.getName(),
+        Messaging.send(sender, "Chunk [$1 $2] in the world &6$3&f is $4", cx, cz, world.getName(),
                 chunkIsLoaded ? ChatColor.GREEN + "loaded" : ChatColor.RED + "not loaded");
     }
 
@@ -80,14 +77,14 @@ public class GeneralCommands {
         if (!DoOrNotify.isPlayer(sender)) return;
         Player player = (Player) sender;
 
-        GUtils.sendMessage(player, "Your location: " + ChatColor.YELLOW + GUtils.locToString(player.getLocation()));
+        Messaging.send(player, "Your location: &e$1", LocUtils.toStringFull(player.getLocation()));
     }
 
     @Command(aliases = { "tp" }, desc = "Teleport player to location", min = 7, max = 7,
              usage = "<player> <world> <x> <y> <z> <pitch> <yaw>")
     @CommandPermissions("gtools.main")
     public void tp(CommandContext args, CommandSender sender) {
-        Player player = DoOrNotify.getPlayer(args.getString(0), true, sender);
+        Player player = DoOrNotify.getPlayer(args.getString(0), sender);
         if (player == null) return;
 
         World world = DoOrNotify.getWorld(args.getString(1), sender);
@@ -105,12 +102,12 @@ public class GeneralCommands {
         try {
             eventClass = Class.forName(args.getString(0));
         } catch (ClassNotFoundException e) {
-            GUtils.sendMessage(sender, "&cClass $1 not loaded", args.getString(0));
+            Messaging.send(sender, "&cClass $1 not loaded", args.getString(0));
             return;
         }
 
         if (!Event.class.isAssignableFrom(eventClass)) {
-            GUtils.sendMessage(sender, "&cClass $1 is not a Event class", args.getString(0));
+            Messaging.send(sender, "&cClass $1 is not a Event class", args.getString(0));
             return;
         }
 
@@ -118,7 +115,7 @@ public class GeneralCommands {
         try {
             handlerField = eventClass.getDeclaredField("handlers");
         } catch (NoSuchFieldException ex) {
-            GUtils.sendMessage(sender, "&cClass $1 has no handler list", args.getString(0));
+            Messaging.send(sender, "&cClass $1 has no handler list", args.getString(0));
             return;
         }
 
@@ -128,7 +125,7 @@ public class GeneralCommands {
         try {
             handlerList = (HandlerList) handlerField.get(null);
         } catch (Exception ex) {
-            GUtils.sendMessage(sender, ChatColor.RED + ex.getMessage());
+            Messaging.send(sender, ChatColor.RED + ex.getMessage());
             return;
         }
 
@@ -141,7 +138,7 @@ public class GeneralCommands {
 
     @Command(aliases = { "id" }, desc = "Shows id and data of the stack in your hand", min = 0, max = 0)
     @CommandPermissions("gtools.main")
-    public void stackdata(CommandContext args, CommandSender sender) {
+    public void stackInfo(CommandContext args, CommandSender sender) {
         if (!DoOrNotify.isPlayer(sender)) return;
         Player player = (Player) sender;
 
@@ -152,6 +149,6 @@ public class GeneralCommands {
         } else {
             message = ChatColor.YELLOW.toString() + stack.getTypeId() + ChatColor.GRAY + ":" + ChatColor.GREEN + stack.getDurability();
         }
-        GUtils.sendMessage(player, message);
+        Messaging.send(player, message);
     }
 }

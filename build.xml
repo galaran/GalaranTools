@@ -1,9 +1,9 @@
 <project name="GalaranTools" basedir=".">
 
     <property name="plugins.dir" value="C:/Users/Galaran/Desktop/McServer/plugins"/>
-    <property name="utils.srcroot" value="F:/Dropbox/Java/idea_prj/Bukkit/GalaranUtils/src"/>
+    <property name="utils.srcroot" value="C:/Dropbox/Java/idea_prj/Bukkit/GalaranUtils/src"/>
     <property name="utils.package" value="me/galaran/bukkitutils"/>
-    <property name="utils.placeholder" value="$_utils_project_name_$"/>
+    <property name="utils.placeholder" value="__utils_project_name__"/>
     <property name="utils.suffix" value="gtools"/>
 
     <target name="copy-plugin">
@@ -18,11 +18,13 @@
         <mkdir dir="src/${utils.package}/${utils.suffix}"/>
         <copy todir="src/${utils.package}/${utils.suffix}">
             <fileset dir="${utils.srcroot}/${utils.package}/${utils.placeholder}">
-                <include name="GUtils.java"/>
+                <include name="Messaging.java"/>
                 <include name="StringUtils.java"/>
-                <include name="DoOrNotify.java"/>
                 <include name="ToStringer.java"/>
+
                 <include name="Lang.java"/>
+                <include name="DoOrNotify.java"/>
+                <include name="LocUtils.java"/>
             </fileset>
         </copy>
         <replace dir="src/${utils.package}/${utils.suffix}" token="${utils.placeholder}" value="${utils.suffix}"/>

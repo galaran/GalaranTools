@@ -14,7 +14,7 @@ public class Lang {
     private static final Map<String, String> langMap = new HashMap<String, String>();
     private static String lang;
 
-    public static void initLang(String language, Plugin plugin) throws Exception {
+    public static void init(String language, Plugin plugin) throws IOException {
         String langFileName = language + ".lang";
         File langFile = new File(plugin.getDataFolder(), langFileName);
         if (!langFile.isFile()) {
@@ -32,19 +32,13 @@ public class Lang {
         for (String curKey : prop.stringPropertyNames()) {
             langMap.put(curKey, prop.getProperty(curKey));
         }
-
-        updateUtilsTranslation();
     }
 
-    private static void updateUtilsTranslation() {
-        DoOrNotify.setNotifyMessages(langMap.get("utils.no-player"), langMap.get("utils.no-world"), langMap.get("utils.cs-not-player"));
-    }
-
-    public static String getTranslation(String key) {
+    public static String of(String key) {
         String val = langMap.get(key);
         if (val == null) {
             val = ChatColor.RED + "Missing translation for key " + ChatColor.DARK_RED + key + ChatColor.RED + ", lang: " + lang;
-            GUtils.log(Level.WARNING, val);
+            Messaging.log(Level.WARNING, val);
         }
         return val;
     }

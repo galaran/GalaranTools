@@ -1,6 +1,6 @@
 name: GalaranTools
 main: me.galaran.bukkittools.GalaranTools
-version: 2.1
+version: 2.2
 author: Galaran
 
 load: POSTWORLD
@@ -15,9 +15,16 @@ commands:
         description: Say as command
         permission: gtools.sayas
         permission-message: You do not have permission
+    playercmd:
+        description: Execute player command from console
+        permission: gtools.playercmd
+        permission-message: You do not have permission
+        aliases: [pcmd]
 
 permissions:
     gtools.main:
         default: op
     gtools.sayas:
+        default: op
+    gtools.playercmd:
         default: op

@@ -7,11 +7,7 @@ import org.bukkit.command.CommandSender;
 
 public class GTCommands {
 
-    private final GalaranTools plugin;
-
-    public GTCommands(GalaranTools plugin) {
-        this.plugin = plugin;
-    }
+    public GTCommands(GalaranTools plugin) { }
 
     @Command(aliases = { "gtools", "gt" }, desc = "GTools commands")
     @NestedCommand({ GeneralCommands.class })
