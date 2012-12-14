@@ -18,12 +18,10 @@
         <mkdir dir="src/${utils.package}/${utils.suffix}"/>
         <copy todir="src/${utils.package}/${utils.suffix}">
             <fileset dir="${utils.srcroot}/${utils.package}/${utils.placeholder}">
-                <include name="Messaging.java"/>
-                <include name="StringUtils.java"/>
-                <include name="ToStringer.java"/>
+                <include name="text/Messaging.java"/>
+                <include name="text/StringUtils.java"/>
+                <include name="text/TranslationBase.java"/>
 
-                <include name="Lang.java"/>
-                <include name="DoOrNotify.java"/>
                 <include name="LocUtils.java"/>
             </fileset>
         </copy>

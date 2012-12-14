@@ -3,10 +3,9 @@ package me.galaran.bukkittools;
 import com.sk89q.minecraft.util.commands.gtools.Command;
 import com.sk89q.minecraft.util.commands.gtools.CommandContext;
 import com.sk89q.minecraft.util.commands.gtools.CommandPermissions;
-import me.galaran.bukkitutils.gtools.Messaging;
-import me.galaran.bukkitutils.gtools.StringUtils;
+import me.galaran.bukkitutils.gtools.text.Messaging;
+import me.galaran.bukkitutils.gtools.text.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -26,11 +25,10 @@ public class SayAsCommand {
         String name = commandStr.substring(0, delimIndex).trim();
         String message = commandStr.substring(delimIndex + 1, commandStr.length()).trim();
 
-        String text = ChatColor.GRAY + "[" + name + ChatColor.GRAY + "] " + message;
-        text = StringUtils.colorizeAmps(text);
+        String result = StringUtils.colorizeAmps("&7[" + name + "&7] " + message);
         for (Player curPlayer : Bukkit.getOnlinePlayers()) {
-            curPlayer.sendMessage(text);
+            curPlayer.sendMessage(result);
         }
-        Messaging.log(text);
+        Messaging.log(result);
     }
 }
