@@ -4,7 +4,9 @@ import com.sk89q.minecraft.util.commands.gtools.Command;
 import com.sk89q.minecraft.util.commands.gtools.CommandContext;
 import com.sk89q.minecraft.util.commands.gtools.CommandPermissions;
 import me.galaran.bukkitutils.gtools.LocUtils;
+import me.galaran.bukkitutils.gtools.nms.ItemStackWithNBT;
 import me.galaran.bukkitutils.gtools.text.Messaging;
+import me.galaran.bukkitutils.gtools.text.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -148,6 +150,21 @@ public class GeneralCommands {
             Messaging.send(player, "no-stack-in-hand");
         } else {
             Messaging.sendRaw(player, "&e$1&7:&a$2", stack.getTypeId(), stack.getDurability());
+        }
+    }
+
+    @Command(aliases = { "addlore" }, desc = "Add lore line to stack in hand", usage = "<lore_line>", min = 1)
+    @CommandPermissions("gtools.main")
+    public void addLore(CommandContext args, CommandSender sender) {
+        if (!Messaging.isPlayer(sender)) return;
+        Player player = (Player) sender;
+
+        ItemStack stack = player.getItemInHand();
+        if (stack == null || stack.getType() == Material.AIR) {
+            Messaging.send(player, "no-stack-in-hand");
+        } else {
+            ItemStackWithNBT nbtStack = new ItemStackWithNBT(stack);
+            nbtStack.addLore(StringUtils.colorizeAmps(args.getJoinedStrings(0)));
         }
     }
 }

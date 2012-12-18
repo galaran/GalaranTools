@@ -1,14 +1,17 @@
 <project name="GalaranTools" basedir=".">
 
+
+    <property name="utils.suffix" value="gtools"/>
+    <property name="jar.name" value="GalaranTools"/>
+
     <property name="plugins.dir" value="C:/Users/Galaran/Desktop/McServer/plugins"/>
     <property name="utils.srcroot" value="C:/Dropbox/Java/idea_prj/Bukkit/GalaranUtils/src"/>
     <property name="utils.package" value="me/galaran/bukkitutils"/>
     <property name="utils.placeholder" value="__utils_project_name__"/>
-    <property name="utils.suffix" value="gtools"/>
 
     <target name="copy-plugin">
         <copy todir="${plugins.dir}" overwrite="true">
-            <fileset file="GalaranTools.jar"/>
+            <fileset file="${jar.name}.jar"/>
         </copy>
     </target>
 
@@ -23,6 +26,8 @@
                 <include name="text/TranslationBase.java"/>
 
                 <include name="LocUtils.java"/>
+
+                <include name="nms/ItemStackWithNBT.java"/>
             </fileset>
         </copy>
         <replace dir="src/${utils.package}/${utils.suffix}" token="${utils.placeholder}" value="${utils.suffix}"/>
