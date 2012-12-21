@@ -26,8 +26,7 @@
                 <include name="text/TranslationBase.java"/>
 
                 <include name="LocUtils.java"/>
-
-                <include name="nms/ItemStackWithNBT.java"/>
+                <include name="ItemUtils.java"/>
             </fileset>
         </copy>
         <replace dir="src/${utils.package}/${utils.suffix}" token="${utils.placeholder}" value="${utils.suffix}"/>

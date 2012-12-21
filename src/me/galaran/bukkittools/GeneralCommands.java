@@ -3,8 +3,8 @@ package me.galaran.bukkittools;
 import com.sk89q.minecraft.util.commands.gtools.Command;
 import com.sk89q.minecraft.util.commands.gtools.CommandContext;
 import com.sk89q.minecraft.util.commands.gtools.CommandPermissions;
+import me.galaran.bukkitutils.gtools.ItemUtils;
 import me.galaran.bukkitutils.gtools.LocUtils;
-import me.galaran.bukkitutils.gtools.nms.ItemStackWithNBT;
 import me.galaran.bukkitutils.gtools.text.Messaging;
 import me.galaran.bukkitutils.gtools.text.StringUtils;
 import org.bukkit.ChatColor;
@@ -163,8 +163,7 @@ public class GeneralCommands {
         if (stack == null || stack.getType() == Material.AIR) {
             Messaging.send(player, "no-stack-in-hand");
         } else {
-            ItemStackWithNBT nbtStack = new ItemStackWithNBT(stack);
-            nbtStack.addLore(StringUtils.colorizeAmps(args.getJoinedStrings(0)));
+            ItemUtils.addLore(stack, StringUtils.colorizeAmps(args.getJoinedStrings(0)));
         }
     }
 }
