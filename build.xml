@@ -27,6 +27,7 @@
 
                 <include name="LocUtils.java"/>
                 <include name="ItemUtils.java"/>
+                <include name="IOUtils.java"/>
             </fileset>
         </copy>
         <replace dir="src/${utils.package}/${utils.suffix}" token="${utils.placeholder}" value="${utils.suffix}"/>

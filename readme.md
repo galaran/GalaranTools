@@ -11,6 +11,7 @@ GalaranTools
 `/gt id` - показать id и data предмета в руке  
 `/gt tp <player> <world> <x> <y> <z> <pitch> <yaw>` - телепорт указанного игрока в координаты (с pitch и yaw)  
 `/gt addlore <lore_line>` - добавить строку текста (lore) для предмета в руке. Можно использовать цвета  
+`/gt dumpchunks <world>` - сделать дамп чанков в указанном мире  
 
 ### Perm: gtools.sayas
 `/sayas &1Test Name | &5Test Message` - сказать от лица кого-то, будет видно всем игрокам. Можно использовать цвета  
@@ -21,5 +22,5 @@ GalaranTools
 Download
 ========
 
-Версия Bukkit: 1.4.6-R0.1  
+Версия Bukkit: 1.4.6-R0.3  
 https://dl.dropbox.com/u/14150510/dd/mccity/GalaranTools.jar
