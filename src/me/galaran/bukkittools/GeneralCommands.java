@@ -210,4 +210,22 @@ public class GeneralCommands {
             throw new CommandException("Unable to get file for chunk dump", ex);
         }
     }
+
+    @Command(aliases = { "setfood" }, desc = "Set player's food and saturation",
+            usage = "<player> <food> [saturation]", min = 2, max = 3)
+    @CommandPermissions("gtools.main")
+    public void setFood(CommandContext args, CommandSender sender) {
+        Player player = Messaging.getPlayer(args.getString(0), sender);
+        if (player == null) return;
+        
+        int food = args.getInteger(1);
+        food = Math.min(Math.max(0, food), 20);
+        player.setFoodLevel(food);
+        
+        if (args.argsLength() > 2) {
+            float satur = (float) args.getDouble(2);
+            satur = Math.min(Math.max(0.0f, satur), food);
+            player.setSaturation(satur);
+        }
+    }
 }
