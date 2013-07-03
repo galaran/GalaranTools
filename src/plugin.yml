@@ -1,6 +1,6 @@
 name: GalaranTools
 main: me.galaran.bukkittools.GalaranTools
-version: 2.3
+version: 2.4
 author: Galaran
 
 load: POSTWORLD

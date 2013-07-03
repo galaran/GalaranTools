@@ -1,11 +1,10 @@
 <project name="GalaranTools" basedir=".">
 
-
     <property name="utils.suffix" value="gtools"/>
     <property name="jar.name" value="GalaranTools"/>
 
     <property name="plugins.dir" value="C:/Users/Galaran/Desktop/McServer/plugins"/>
-    <property name="utils.srcroot" value="C:/Dropbox/Java/idea_prj/Bukkit/GalaranUtils/src"/>
+    <property name="utils.srcroot" value="C:/Dropbox/Java/projects/z_inactive/Bukkit/GalaranUtils/src"/>
     <property name="utils.package" value="me/galaran/bukkitutils"/>
     <property name="utils.placeholder" value="__utils_project_name__"/>
 

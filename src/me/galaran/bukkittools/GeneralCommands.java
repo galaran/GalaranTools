@@ -11,6 +11,7 @@ import me.galaran.bukkitutils.gtools.text.StringUtils;
 import org.bukkit.*;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -226,6 +227,33 @@ public class GeneralCommands {
             float satur = (float) args.getDouble(2);
             satur = Math.min(Math.max(0.0f, satur), food);
             player.setSaturation(satur);
+        }
+    }
+    
+    private static final int MOB_SPAWN_LIMIT = 1024;
+
+    @Command(aliases = { "mob" }, desc = "Spawn mob(s) at specified location",
+            usage = "<type> <world> <x> <y> <z> [num]", min = 5, max = 6)
+    @CommandPermissions("gtools.main")
+    public void spawnMob(CommandContext args, CommandSender sender) {
+        EntityType type = EntityType.fromName(args.getString(0));
+        if (type == null) {
+            Messaging.send(sender, "mobspawn.invalid-type", args.getString(0));
+            return;
+        }
+
+        World world = Messaging.getWorld(args.getString(1), sender);
+        if (world == null) return;
+        Location spawnLoc = new Location(world, args.getDouble(2), args.getDouble(3), args.getDouble(4));
+        
+        int num = 1;
+        if (args.argsLength() > 5) {
+            num = args.getInteger(5);
+            num = Math.max(1, Math.min(num, MOB_SPAWN_LIMIT));
+        }
+
+        for (int i = 0; i < num; i++) {
+            world.spawnEntity(spawnLoc, type);
         }
     }
 }

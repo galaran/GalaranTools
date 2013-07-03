@@ -13,6 +13,7 @@ GalaranTools
 `/gt addlore <lore_line>` - добавить строку текста (lore) для предмета в руке. Можно использовать цвета  
 `/gt dumpchunks <world>` - сделать дамп чанков в указанном мире  
 `/gt setfood <player> <food> [saturation]` - установить игроку уровень еды и сытости  
+`/gt mob <type> <world> <x> <y> <z> [num]` - создать указанное количество мобов заданного типа по координатам. [Список типов](https://github.com/Bukkit/Bukkit/blob/master/src/main/java/org/bukkit/entity/EntityType.java)  
 
 ### Perm: gtools.sayas
 `/sayas &1Test Name | &5Test Message` - сказать от лица кого-то, будет видно всем игрокам. Можно использовать цвета  
@@ -23,5 +24,5 @@ GalaranTools
 Download
 ========
 
-Версия Bukkit: 1.4.6-R0.3  
+Версия Bukkit: 1.5.2-R1.0  
 https://dl.dropbox.com/u/14150510/dd/mccity/GalaranTools.jar
